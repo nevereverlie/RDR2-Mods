@@ -1,0 +1,14 @@
+// RDR 2 ASI LOADER (build Nov 14 2019)
+//     (C) Alexander Blade 2019
+LIB: "C:\Windows\system32\dinput8.dll" => 00007FFEEDBA0000
+API: "DirectInput8Create" => 00007FFEEDBA8F80
+API: "DllCanUnloadNow" => 00007FFEEDBB9EB0
+API: "DllGetClassObject" => 00007FFEEDBB9F80
+API: "DllRegisterServer" => 00007FFEEDBC3CB0
+API: "DllUnregisterServer" => 00007FFEEDBC3F30
+LOADER: Loading *.asi plugins
+ASI: Loading "C:\Games\Red.Dead.Redemption.2.Ultimate.Edition.RGL.Rip-InsaneRamZes\Red Dead Redemption 2\NativeTrainer.asi"
+     "NativeTrainer.asi" => 00007FFEED390000
+ASI: Loading "C:\Games\Red.Dead.Redemption.2.Ultimate.Edition.RGL.Rip-InsaneRamZes\Red Dead Redemption 2\ScriptHookRDRDotNet.asi"
+     "ScriptHookRDRDotNet.asi" => 00007FFF2CF00000
+LOADER: Finished loading *.asi plugins

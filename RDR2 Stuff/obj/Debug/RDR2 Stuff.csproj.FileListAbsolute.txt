@@ -1,0 +1,7 @@
+C:\Users\Danilda\source\repos\RDR2 Stuff\RDR2 Stuff\bin\Debug\RDR2 Stuff.dll
+C:\Users\Danilda\source\repos\RDR2 Stuff\RDR2 Stuff\bin\Debug\RDR2 Stuff.pdb
+C:\Users\Danilda\source\repos\RDR2 Stuff\RDR2 Stuff\bin\Debug\ScriptHookRDRNetAPI.dll
+C:\Users\Danilda\source\repos\RDR2 Stuff\RDR2 Stuff\obj\Debug\RDR2 Stuff.csproj.CoreCompileInputs.cache
+C:\Users\Danilda\source\repos\RDR2 Stuff\RDR2 Stuff\obj\Debug\RDR2 Stuff.csproj.CopyComplete
+C:\Users\Danilda\source\repos\RDR2 Stuff\RDR2 Stuff\obj\Debug\RDR2 Stuff.dll
+C:\Users\Danilda\source\repos\RDR2 Stuff\RDR2 Stuff\obj\Debug\RDR2 Stuff.pdb

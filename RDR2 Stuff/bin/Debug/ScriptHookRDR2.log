@@ -1,0 +1,6 @@
+// RDR 2 SCRIPT HOOK (build Jul 31 2020, v1.0.1311.12)
+//     (C) Alexander Blade 2019-2020
+[18:47:12] INIT: Started
+[18:47:13] INIT: Success, game version is VER_AUTO
+[18:47:13] INIT: Registering script 'NativeTrainer.asi' (0x00007FFEED3AF620)
+[18:47:13] INIT: Registering script 'ScriptHookRDRDotNet.asi' (0x00007FFF2CF01480)
