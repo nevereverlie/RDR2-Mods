@@ -80,17 +80,17 @@ namespace RDR2_Stuff
                 }
             }
         }
-        private void TrackAimPosition() // for debug purposes
+        private void TrackAimPosition() // enable it for debug purposes
         {
             Vector3 aimPosition = GetAimPosition();
-            //var txt = new TextElement(aimPosition.ToString(), new PointF(300f, 300f), 0.3f);
-            //txt.Draw();
+            var txt = new TextElement(aimPosition.ToString(), new PointF(300f, 300f), 0.3f);
+            txt.Draw();
             Vector2 aimPosition2D = World3DToScreen2d(aimPosition);
             DrawRect(aimPosition2D.X, aimPosition2D.Y, 0.005f, 0.005f, Color.Red);
         }
         private static Vector3 GetAimPosition()
         {
-            //get Aim Postion
+            //get AimPosition
             Vector3 camPos = Function.Call<Vector3>(Hash.GET_GAMEPLAY_CAM_COORD);
             Vector3 camRot = Function.Call<Vector3>(Hash.GET_GAMEPLAY_CAM_ROT);
 
@@ -99,7 +99,7 @@ namespace RDR2_Stuff
             float absx = (float)Math.Abs(Math.Cos(retx));
             Vector3 camStuff = new Vector3((float)Math.Sin(retz) * absx * -1, (float)Math.Cos(retz) * absx, (float)Math.Sin(retx));
 
-            //AimPosition Result
+            //AimPosition result
             RaycastResult ray = World.Raycast(camPos, camPos + camStuff * 1000, IntersectOptions.Everything, Game.Player.Character);
             if (!ray.DitHit || ray.HitPosition == default(Vector3) || Vector3.Distance(camPos, ray.HitPosition) >= 500f)
             {
@@ -116,7 +116,7 @@ namespace RDR2_Stuff
             }
             catch (Exception ex)
             {
-                File.WriteAllText(@"C:\Users\Danilda\source\repos\RDR2 Stuff\log.txt", ex.Message);
+                File.WriteAllText(Path.Combine(Environment.CurrentDirectory, "log.txt"), ex.Message);
             }
         }
         Vector2 World3DToScreen2d(Vector3 pos)
@@ -214,22 +214,12 @@ namespace RDR2_Stuff
                 return;
             }
 
-
-            /*var menuPrompt = new InputArgument(Function.Call<Prompt>(Hash._UIPROMPT_REGISTER_BEGIN));
-            var hash = new InputArgument(Function.Call<Hash>(Hash.GET_HASH_KEY, "INPUT_Z"));
-            Function.Call(Hash._UIPROMPT_SET_CONTROL_ACTION, menuPrompt, hash);
-
-            var text = new InputArgument(Function.Call<string>(Hash._CREATE_VAR_STRING, 10, "LITERAL_STRING", "Hunting Wagon"));
-            Function.Call(Hash._UIPROMPT_SET_TEXT, menuPrompt, text);
-
-            Function.Call(Hash._UIPROMPT_REGISTER_END, menuPrompt);*/ //fucking fuck
-
             var hitPosHash = new OutputArgument();
             Function.Call(Hash.GET_PED_LAST_WEAPON_IMPACT_COORD, Game.Player.Character.Handle, hitPosHash);
             var hitPos = hitPosHash.GetResult<Vector3>();
             if (lastHitPosition != hitPos)
             {
-                Function.Call(Hash.ADD_EXPLOSION, hitPos.X, hitPos.Y, hitPos.Z, 1, 2.0, 1, 0, 1); //Add explosion
+                Function.Call(Hash.ADD_EXPLOSION, hitPos.X, hitPos.Y, hitPos.Z, 1, 2.0, 1, 0, 1);
                 lastHitPosition = hitPos;
             }
         }
@@ -245,6 +235,4 @@ namespace RDR2_Stuff
             return currentWeapon;
         }
     }
-
-
 }
