@@ -3,10 +3,12 @@ using RDR2.Math;
 using RDR2.Native;
 using RDR2.UI;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Input;
 
 namespace RDR2_Stuff
 {
@@ -15,20 +17,36 @@ namespace RDR2_Stuff
         private Vector3 lastHitPosition = Vector3.Zero;
         private Vector3 lastTeleportPosition = Game.Player.Character.Position;
 
-        private bool IsTeleportEnabled = false; 
+        private bool IsTeleportEnabled = false;
         private bool IsExplosiveShotgunsEnabled = false;
+
+        private string lastSearchResult = "";
+        private List<string> AnimalPedDb = new List<string>();
 
         public Client()
         {
+            FillAnimalPedDb();
             KeyDown += BowTeleportEventHandler;
             KeyUp += UIEventHandler;
             Tick += TickEvent;
             Interval = 1;
         }
+        private void FillAnimalPedDb()
+        {
+            using (StreamReader pedFile = new StreamReader(Directory.GetCurrentDirectory() + @"\animals.txt"))
+            {
+                while (pedFile.ReadLine() != null)
+                {
+                    AnimalPedDb.Add(pedFile.ReadLine());
+                }
+                pedFile.Close();
+            }
+        }
+
 
         private void UIEventHandler(object sender, KeyEventArgs e)
         {
-            switch(e.KeyCode)
+            switch (e.KeyCode)
             {
                 case Keys.F1:
                     IsTeleportEnabled = !IsTeleportEnabled;
@@ -136,11 +154,19 @@ namespace RDR2_Stuff
             {
                 string resultPed = GetUserInput();
 
-                PedHash pedHash = Function.Call<PedHash>(Hash.GET_HASH_KEY, resultPed);
+                if (resultPed != null)
+                {
+                    PedHash pedHash = Function.Call<PedHash>(Hash.GET_HASH_KEY, resultPed);
 
-                Vector3 aimPos = GetAimPosition();
+                    Vector3 aimPos = GetAimPosition();
 
-                CreatePed(pedHash, aimPos.X, aimPos.Y, aimPos.Z, aimPos.ToHeading());
+                    int pedHandle = CreatePed(pedHash, aimPos.X, aimPos.Y, aimPos.Z, aimPos.ToHeading());
+
+                    if (Function.Call<bool>(Hash.DOES_ENTITY_EXIST, pedHandle))
+                    {
+                        RDR2.UI.Screen.ShowSubtitle($"{resultPed} spawned");
+                    }
+                }
             }
 
             if (IsExplosiveShotgunsEnabled)
@@ -148,30 +174,71 @@ namespace RDR2_Stuff
                 ExplosiveShotguns();
             }
         }
+
         private string GetUserInput()
         {
-            DisplayOnScreenKeyboard("PED SELECT", "Ped", 50);
-            while (UpdateOnScreenKeyboard() != 1)
+            DisplayOnScreenKeyboard("PED SELECT", lastSearchResult, 99);
+            while (UpdateOnScreenKeyboard() == 0)
             {
                 Wait(0);
             }
             string resultPed = Function.Call<string>(Hash.GET_ONSCREEN_KEYBOARD_RESULT);
+            if (resultPed == "")
+            {
+                return null;
+            }
+
+            if (TryGuess(resultPed) != null)
+            {
+                resultPed = TryGuess(resultPed);
+            }
+
+            if (resultPed != lastSearchResult)
+            {
+                lastSearchResult = resultPed;
+            }
             Function.Call(Hash._CANCEL_ONSCREEN_KEYBOARD);
-            RDR2.UI.Screen.ShowSubtitle(resultPed);
             return resultPed;
         }
+
+        private string TryGuess(string inputAnimal)
+        {
+            string guessedAnimal = GuessAnimal(inputAnimal);
+            if (guessedAnimal != null)
+            {
+                return guessedAnimal;
+            }
+            return null;
+        }
+
+        private string GuessAnimal(string inputAnimal)
+        {
+            string guessedAnimal = null;
+            foreach (string animal in AnimalPedDb)
+            {
+                if (animal.Contains(inputAnimal))
+                {
+                    guessedAnimal = animal;
+                    break;
+                }
+            }
+            //RDR2.UI.Screen.ShowSubtitle($"{guessedAnimal}");
+
+            return guessedAnimal;
+        }
+
         private void DisplayOnScreenKeyboard(string caption, string defaultText, int maxInputLength)
         {
-            Function.Call(Hash.DISPLAY_ONSCREEN_KEYBOARD, 0, caption, "", defaultText, "", "", "", maxInputLength);
+            Function.Call(Hash.DISPLAY_ONSCREEN_KEYBOARD, 1, caption, "", defaultText, "", "", "", maxInputLength);
         }
         private int CreatePed(PedHash ped, float posx, float posy, float posz, float heading)
         {
-            var task = LoadPed(ped); 
+            var task = LoadPed(ped);
             _ = task;
             int pedToCreate = Function.Call<int>(Hash.CREATE_PED, (uint)ped, posx, posy, posz, heading, true, true, true, true);
             //Function.Call(Hash.SET_ENTITY_AS_MISSION_ENTITY, pedToCreate, true, true); // setting this true for this ped not "despawn"
-            SetRandomOutfitVariation(pedToCreate); 
-            Function.Call(Hash.SET_MODEL_AS_NO_LONGER_NEEDED, ((uint)ped)); 
+            SetRandomOutfitVariation(pedToCreate);
+            Function.Call(Hash.SET_MODEL_AS_NO_LONGER_NEEDED, ((uint)ped));
             return pedToCreate;
         }
         private void SetRandomOutfitVariation(int ped)
@@ -181,9 +248,13 @@ namespace RDR2_Stuff
         private bool LoadPed(PedHash pedHash)
         {
             if (LoadModel((int)pedHash))
+            {
                 return true;
+            }
             else
+            {
                 return false;
+            }
         }
         private bool LoadModel(int modelHash)
         {
@@ -205,6 +276,7 @@ namespace RDR2_Stuff
         {
             return Function.Call<int>(Hash.UPDATE_ONSCREEN_KEYBOARD);
         }
+
 
 
         private void ExplosiveShotguns()

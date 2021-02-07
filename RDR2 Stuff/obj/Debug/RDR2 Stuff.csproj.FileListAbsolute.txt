@@ -8,8 +8,8 @@ C:\Users\Danilda\source\repos\RDR2 Stuff\RDR2 Stuff\obj\Debug\RDR2 Stuff.pdb
 C:\Repos\RDR2-Mods\RDR2 Stuff\bin\Debug\RDR2 Stuff.dll
 C:\Repos\RDR2-Mods\RDR2 Stuff\bin\Debug\RDR2 Stuff.pdb
 C:\Repos\RDR2-Mods\RDR2 Stuff\bin\Debug\ScriptHookRDRNetAPI.dll
-C:\Repos\RDR2-Mods\RDR2 Stuff\obj\Debug\RDR2 Stuff.csprojAssemblyReference.cache
 C:\Repos\RDR2-Mods\RDR2 Stuff\obj\Debug\RDR2 Stuff.csproj.CoreCompileInputs.cache
 C:\Repos\RDR2-Mods\RDR2 Stuff\obj\Debug\RDR2 Stuff.csproj.CopyComplete
 C:\Repos\RDR2-Mods\RDR2 Stuff\obj\Debug\RDR2 Stuff.dll
 C:\Repos\RDR2-Mods\RDR2 Stuff\obj\Debug\RDR2 Stuff.pdb
+C:\Repos\RDR2-Mods\RDR2 Stuff\obj\Debug\RDR2 Stuff.csprojAssemblyReference.cache
